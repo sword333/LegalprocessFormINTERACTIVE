@@ -427,11 +427,30 @@
 </div>
 
 <div class="actions-bar">
-  <button class="btn-action" onclick="window.print()">طباعة / تصدير PDF</button>
+  <button class="btn-action" onclick="printForm()">طباعة / تصدير PDF</button>
   <button class="btn-action reset" onclick="window.location.reload()">إعادة ضبط</button>
 </div>
 
 <script>
+  function printForm() {
+    var actionBar = document.querySelector('.actions-bar');
+    var creditFooter = document.querySelector('.credit-footer');
+    var browserWarning = document.getElementById('browser-warning');
+
+    // 1. Instantly hide the elements
+    if (actionBar) actionBar.style.display = 'none';
+    if (creditFooter) creditFooter.style.display = 'none';
+    if (browserWarning) browserWarning.style.display = 'none';
+
+    // 2. Trigger the mobile print engine
+    window.print();
+
+    // 3. Bring the elements back after 1.5 seconds (gives the phone time to build the PDF)
+    setTimeout(function() {
+      if (actionBar) actionBar.style.display = 'flex';
+      if (creditFooter) creditFooter.style.display = 'block';
+    }, 1500);
+  }
   function setupSignature(canvasId) {
     const canvas = document.getElementById(canvasId);
     const ctx = canvas.getContext('2d');
