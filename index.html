@@ -366,35 +366,45 @@
   <!-- Property Details -->
   <div class="section-title">بيانات العقار محل التصرف</div>
   <table class="table-grid">
-   <tr>
-      <tr>
-      <!-- 1. رقم القطعة (Kept as text) -->
-      <td><input type="text"></td>
-      
-      <!-- 2. المربع (Kept as text) -->
-      <td><input type="text"></td>
-      
-      <!-- 3. الحي / القرية (Dynamic Dropdown) -->
-      <td>
-        <select id="village" style="width: 100%; border: none; outline: none; background: transparent; text-align: center; font-size: 13px; font-weight: bold; font-family: inherit;">
-          <option value=""></option>
-        </select>
-      </td>
-      
-      <!-- 4. الولاية (Triggers the change) -->
+    <!-- Header Labels (Reordered) -->
+    <tr>
+      <th>الولاية</th>
+      <th>الحي / القرية</th>
+      <th>رقم القطعة[cite: 1]</th>
+      <th>المربع[cite: 1]</th>
+      <th>الاستعمال ...[cite: 1]</th>
+      <th>المساحة ... م٢[cite: 1]</th>
+    </tr>
+    
+    <!-- Input Row (Reordered) -->
+    <tr>
+      <!-- 1. الولاية (Triggers the change) -->
       <td>
         <select id="wilayat" onchange="updateVillages()" style="width: 100%; border: none; outline: none; background: transparent; text-align: center; font-size: 13px; font-weight: bold; font-family: inherit;">
-          <option value=""></option>
+          <option value="" disabled selected>اختر الولاية</option>
           <option value="البريمي">البريمي</option>
           <option value="محضة">محضة</option>
           <option value="السنينة">السنينة</option>
         </select>
       </td>
       
-      <!-- 5. الاستعمال (Dropdown) -->
+      <!-- 2. الحي / القرية (Dynamic Dropdown) -->
+      <td>
+        <select id="village" style="width: 100%; border: none; outline: none; background: transparent; text-align: center; font-size: 13px; font-weight: bold; font-family: inherit;">
+          <option value="" disabled selected>اختر القرية</option>
+        </select>
+      </td>
+      
+      <!-- 3. رقم القطعة -->
+      <td><input type="text" placeholder="اكتب هنا..."></td>
+      
+      <!-- 4. المربع -->
+      <td><input type="text" placeholder="اكتب هنا..."></td>
+      
+      <!-- 5. الاستعمال -->
       <td>
         <select style="width: 100%; border: none; outline: none; background: transparent; text-align: center; font-size: 13px; font-weight: bold; font-family: inherit;">
-          <option value=""></option>
+          <option value="" disabled selected>اختر الاستعمال</option>
           <option value="سكني">سكني</option>
           <option value="زراعي">زراعي</option>
           <option value="سكني تجاري">سكني تجاري</option>
@@ -404,8 +414,8 @@
         </select>
       </td>
       
-      <!-- 6. المساحة م٢ (Kept as text exactly like original) -->
-      <td><input type="text"></td>
+      <!-- 6. المساحة م٢ -->
+      <td><input type="text" placeholder="اكتب هنا..."></td>
     </tr>
   </table>
 
@@ -539,7 +549,7 @@ const villageData = {
     const villageSelect = document.getElementById("village");
     
     // Clear the current options
-    villageSelect.innerHTML = '<option value=""></option>';
+    villageSelect.innerHTML = '<option value="" disabled selected>اختر القرية</option>';
     
     // Add the new options based on the selection
     if (villageData[wilayat]) {
