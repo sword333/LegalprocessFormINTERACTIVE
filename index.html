@@ -260,6 +260,14 @@
     }
     /* ------------------------------- */
     @media print {
+      select {
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        appearance: none !important;
+        background: transparent !important;
+        border: none !important;
+        color: #000;
+      }
       @page {
         size: A4;
         margin: 0; /* Forces one page by removing browser headers/footers */
@@ -358,20 +366,45 @@
   <!-- Property Details -->
   <div class="section-title">بيانات العقار محل التصرف</div>
   <table class="table-grid">
-    <tr>
-      <th>رقم القطعة</th>
-      <th>المربع</th>
-      <th>الحي / القرية</th>
-      <th>الولاية</th>
-      <th>الاستعمال ...</th>
-      <th>المساحة ... م٢</th>
-    </tr>
-    <tr>
+   <tr>
+      <tr>
+      <!-- 1. رقم القطعة (Kept as text) -->
       <td><input type="text"></td>
+      
+      <!-- 2. المربع (Kept as text) -->
       <td><input type="text"></td>
-      <td><input type="text"></td>
-      <td><input type="text"></td>
-      <td><input type="text"></td>
+      
+      <!-- 3. الحي / القرية (Dynamic Dropdown) -->
+      <td>
+        <select id="village" style="width: 100%; border: none; outline: none; background: transparent; text-align: center; font-size: 13px; font-weight: bold; font-family: inherit;">
+          <option value=""></option>
+        </select>
+      </td>
+      
+      <!-- 4. الولاية (Triggers the change) -->
+      <td>
+        <select id="wilayat" onchange="updateVillages()" style="width: 100%; border: none; outline: none; background: transparent; text-align: center; font-size: 13px; font-weight: bold; font-family: inherit;">
+          <option value=""></option>
+          <option value="البريمي">البريمي</option>
+          <option value="محضة">محضة</option>
+          <option value="السنينة">السنينة</option>
+        </select>
+      </td>
+      
+      <!-- 5. الاستعمال (Dropdown) -->
+      <td>
+        <select style="width: 100%; border: none; outline: none; background: transparent; text-align: center; font-size: 13px; font-weight: bold; font-family: inherit;">
+          <option value=""></option>
+          <option value="سكني">سكني</option>
+          <option value="زراعي">زراعي</option>
+          <option value="سكني تجاري">سكني تجاري</option>
+          <option value="تجاري">تجاري</option>
+          <option value="صناعي">صناعي</option>
+          <option value="سياحي">سياحي</option>
+        </select>
+      </td>
+      
+      <!-- 6. المساحة م٢ (Kept as text exactly like original) -->
       <td><input type="text"></td>
     </tr>
   </table>
@@ -495,7 +528,29 @@
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
+const villageData = {
+    "البريمي": ["البريمي", "صعراء القديمة", "صعراء الجديدة", "الخضراء القديمة", "حماسة", "أرض الجو", "الخضراء الجديدة", "الغريفة", "العقدة شمال/جنوب", "المنطقة الصناعية", "أخرى"],
+    "محضة": ["محضة", "الزهيرات", "الورقة", "الوحاشة", "الصلاحات", "حارة الشرق", "الغيلة", "الرميلة", "كحل", "العوهة", "الروضة", "أخرى"],
+    "السنينة": ["السنينة", "الهرموزي", "الريحاني", "الراكي", "العويدة", "أخرى"]
+  };
 
+  function updateVillages() {
+    const wilayat = document.getElementById("wilayat").value;
+    const villageSelect = document.getElementById("village");
+    
+    // Clear the current options
+    villageSelect.innerHTML = '<option value=""></option>';
+    
+    // Add the new options based on the selection
+    if (villageData[wilayat]) {
+      villageData[wilayat].forEach(function(village) {
+        const option = document.createElement("option");
+        option.value = village;
+        option.text = village;
+        villageSelect.appendChild(option);
+      });
+    }
+  }
   window.onload = function() {
     setupSignature('sig1');
     setupSignature('sig2');
