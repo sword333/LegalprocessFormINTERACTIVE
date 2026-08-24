@@ -224,6 +224,7 @@
     /* --- Print & PDF Export Rules --- */
     /* --- Print & PDF Export Rules --- */
     /* --- Print & PDF Export Rules --- */
+    /* --- Print & PDF Export Rules --- */
     @media print {
       @page { size: A4; margin: 0; }
       html, body { 
@@ -234,7 +235,7 @@
       }
       .page-container { 
         box-shadow: none !important; 
-        padding: 8mm 12mm !important; 
+        padding: 5mm 8mm !important; /* Reduced padding to give more vertical space */
         width: 100% !important; 
         height: 297mm !important; 
         max-height: 297mm !important;
@@ -244,7 +245,7 @@
         page-break-inside: avoid !important;
       }
       
-      /* THE BULLETPROOF FIX: Use Flexbox and Nowrap to mathematically prevent the second signature from dropping down */
+      /* The Flexbox Fix for side-by-side grids */
       .signatures-container { 
         display: flex !important; 
         flex-direction: row !important; 
@@ -252,45 +253,52 @@
         justify-content: space-between !important; 
         width: 100% !important;
         page-break-inside: avoid !important;
+        page-break-before: avoid !important; /* Forces it to stay attached to the bottom of page 1 */
+        margin-top: 5px !important;
       }
       .sig-card {
-        width: 48% !important; /* Strictly limits width so they perfectly fit side-by-side */
+        width: 48% !important; 
         page-break-inside: avoid !important;
       }
       
-      /* Apply the same Flexbox fix to the other grids to stop them from expanding the page height */
-      .grid-3 { 
-        display: flex !important; 
-        flex-direction: row !important; 
-        flex-wrap: nowrap !important; 
-        justify-content: space-between !important; 
-      }
+      .grid-3 { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; justify-content: space-between !important; margin-bottom: 2px !important; }
       .grid-3 > div { width: 32% !important; }
       
-      .grid-2 { 
-        display: flex !important; 
-        flex-direction: row !important; 
-        flex-wrap: nowrap !important; 
-        justify-content: space-between !important; 
-      }
+      .grid-2 { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; justify-content: space-between !important; margin-bottom: 2px !important; }
       .grid-2 > div { width: 48% !important; }
       
-      .inline-field { flex-wrap: nowrap !important; }
+      .inline-field { flex-wrap: nowrap !important; margin-bottom: 2px !important; }
       
-      /* Compress spacing slightly to guarantee A4 fit */
-      .header-image-container img { max-height: 95px !important; }
-      .form-title { margin: 2px 0 5px 0 !important; }
-      .section-title { margin-top: 5px !important; margin-bottom: 5px !important; }
-      .notice-box { margin: 5px 0 !important; line-height: 1.4 !important; }
+      /* 
+         THE FIX: Extreme Vertical Compression!
+         Shrinks table paddings, font sizes, and line-heights 
+         so the content physically cannot reach the bottom edge of the page.
+      */
+      .table-grid th, .table-grid td { padding: 2px !important; }
+      .checkbox-group { margin: 2px 0 !important; padding: 0 !important; }
+      
+      /* Shrink all fonts slightly on the exported PDF */
+      body, .salutation, .notice-box, .section-title, input, select, th, td, label, .sig-card h4 { 
+        font-size: 11px !important; 
+      }
+      
+      .notice-box { margin: 2px 0 !important; line-height: 1.2 !important; }
+      .salutation { margin-bottom: 2px !important; line-height: 1.2 !important; }
+      
+      /* Compress images and headers */
+      .header-image-container img { max-height: 85px !important; }
+      .form-title { margin: 2px 0 2px 0 !important; font-size: 14px !important; }
+      .section-title { margin-top: 2px !important; margin-bottom: 2px !important; }
       
       canvas { 
         border: none !important; 
         background: transparent !important; 
-        height: 45px !important; 
-        max-height: 45px !important;
+        height: 40px !important; /* Shrunk slightly more */
+        max-height: 40px !important;
         width: 100% !important;
         object-fit: contain !important;
       }
+      
       .actions-bar, .btn-clear, .credit-footer, #browser-warning { 
         display: none !important; 
       }
