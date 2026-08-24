@@ -172,7 +172,7 @@
       margin-top: 5px;
     }
     .credit-footer {
-      text-align: right;
+      text-align: left;
       font-size: 8px;
       color: #555;
       margin-top: 20px;
@@ -222,6 +222,7 @@
     /* --- Print & PDF Export Rules --- */
    /* --- Print & PDF Export Rules --- */
     /* --- Print & PDF Export Rules --- */
+    /* --- Print & PDF Export Rules --- */
     @media print {
       @page { size: A4; margin: 0; }
       html, body { 
@@ -232,33 +233,38 @@
       }
       .page-container { 
         box-shadow: none !important; 
-        padding: 5mm !important; 
+        padding: 8mm 12mm !important; 
         width: 100% !important; 
-        height: 280mm !important; /* Strict height limit well below A4 maximum */
-        max-height: 280mm !important;
+        height: 297mm !important; 
+        max-height: 297mm !important;
         overflow: hidden !important; 
         page-break-after: avoid !important;
         page-break-before: avoid !important;
         page-break-inside: avoid !important;
-        margin: 0 auto !important;
       }
       
-      /* --- Aggressively Compress Vertical Space for Mobile PDF --- */
-      .header-image-container img { max-height: 90px !important; }
-      .form-title { margin: 2px 0 !important; }
-      .salutation { margin-bottom: 4px !important; line-height: 1.3 !important; }
-      .checkbox-group { margin: 4px 0 !important; padding: 2px !important; }
-      .section-title { margin-top: 6px !important; margin-bottom: 4px !important; }
-      .notice-box { margin: 4px 0 !important; line-height: 1.3 !important; }
-      .grid-3, .inline-field { margin-bottom: 4px !important; }
-      .signatures-container { margin-top: 5px !important; gap: 15px !important; }
-      /* ----------------------------------------------------------- */
-
+      /* THE FIX: Force mobile PDF to use Desktop grid, stopping signatures from stacking vertically */
+      .grid-3 { grid-template-columns: 1fr 1fr 1fr !important; display: grid !important; gap: 10px !important; }
+      .grid-2 { grid-template-columns: 1fr 1fr !important; display: grid !important; gap: 10px !important; }
+      .signatures-container { 
+        grid-template-columns: 1fr 1fr !important; 
+        display: grid !important; 
+        gap: 30px !important; 
+        page-break-inside: avoid !important;
+      }
+      .inline-field { flex-wrap: nowrap !important; }
+      
+      /* Compress spacing slightly to guarantee A4 fit */
+      .header-image-container img { max-height: 100px !important; }
+      .form-title { margin: 2px 0 5px 0 !important; }
+      .section-title { margin-top: 5px !important; margin-bottom: 5px !important; }
+      .notice-box { margin: 5px 0 !important; line-height: 1.4 !important; }
+      
       canvas { 
         border: none !important; 
         background: transparent !important; 
-        height: 45px !important; /* Prevents signature box from pushing the page down */
-        max-height: 45px !important;
+        height: 50px !important; 
+        max-height: 50px !important;
         width: 100% !important;
         object-fit: contain !important;
       }
