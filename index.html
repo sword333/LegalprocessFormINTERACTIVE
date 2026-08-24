@@ -225,6 +225,7 @@
     /* --- Print & PDF Export Rules --- */
     /* --- Print & PDF Export Rules --- */
     /* --- Print & PDF Export Rules --- */
+    /* --- Print & PDF Export Rules --- */
     @media print {
       @page { size: A4; margin: 0; }
       html, body { 
@@ -235,7 +236,7 @@
       }
       .page-container { 
         box-shadow: none !important; 
-        padding: 5mm 8mm !important; /* Reduced padding to give more vertical space */
+        padding: 8mm 12mm !important; /* استعادة الهوامش الطبيعية */
         width: 100% !important; 
         height: 297mm !important; 
         max-height: 297mm !important;
@@ -243,9 +244,12 @@
         page-break-after: avoid !important;
         page-break-before: avoid !important;
         page-break-inside: avoid !important;
+        /* تصغير الصفحة بالكامل بنسبة 4% ليحتويها الهاتف كقطعة واحدة دون ضغط المسافات */
+        transform: scale(0.96) !important;
+        transform-origin: top center !important;
       }
       
-      /* The Flexbox Fix for side-by-side grids */
+      /* نظام Flexbox لحماية التواقيع من النزول لصفحة أخرى في الهاتف */
       .signatures-container { 
         display: flex !important; 
         flex-direction: row !important; 
@@ -253,55 +257,40 @@
         justify-content: space-between !important; 
         width: 100% !important;
         page-break-inside: avoid !important;
-        page-break-before: avoid !important; /* Forces it to stay attached to the bottom of page 1 */
-        margin-top: 5px !important;
+        margin-top: 15px !important; /* استعادة مسافة التنفس للتوقيع */
       }
-      .sig-card {
-        width: 48% !important; 
-        page-break-inside: avoid !important;
-      }
+      .sig-card { width: 48% !important; page-break-inside: avoid !important; }
       
-      .grid-3 { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; justify-content: space-between !important; margin-bottom: 2px !important; }
+      .grid-3 { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; justify-content: space-between !important; margin-bottom: 8px !important; }
       .grid-3 > div { width: 32% !important; }
       
-      .grid-2 { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; justify-content: space-between !important; margin-bottom: 2px !important; }
+      .grid-2 { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; justify-content: space-between !important; margin-bottom: 8px !important; }
       .grid-2 > div { width: 48% !important; }
-      
-      .inline-field { flex-wrap: nowrap !important; margin-bottom: 2px !important; }
+      .inline-field { flex-wrap: nowrap !important; margin-bottom: 8px !important; }
       
       /* 
-         THE FIX: Extreme Vertical Compression!
-         Shrinks table paddings, font sizes, and line-heights 
-         so the content physically cannot reach the bottom edge of the page.
+         استعادة الدقة والمسافات الأصلية الجميلة لنسخة الكمبيوتر 
       */
-      .table-grid th, .table-grid td { padding: 2px !important; }
-      .checkbox-group { margin: 2px 0 !important; padding: 0 !important; }
+      body, input, select, th, td, label, .sig-card h4 { font-size: 13px !important; }
+      .form-title { margin: 10px 0 !important; font-size: 18px !important; }
+      .salutation { margin-bottom: 10px !important; line-height: 1.6 !important; }
+      .section-title { margin-top: 12px !important; margin-bottom: 8px !important; font-size: 14px !important; }
+      .notice-box { margin: 10px 0 !important; line-height: 1.5 !important; font-size: 12px !important; }
+      .checkbox-group { margin: 10px 0 !important; padding: 6px !important; }
+      .table-grid th, .table-grid td { padding: 5px !important; }
       
-      /* Shrink all fonts slightly on the exported PDF */
-      body, .salutation, .notice-box, .section-title, input, select, th, td, label, .sig-card h4 { 
-        font-size: 11px !important; 
-      }
-      
-      .notice-box { margin: 2px 0 !important; line-height: 1.2 !important; }
-      .salutation { margin-bottom: 2px !important; line-height: 1.2 !important; }
-      
-      /* Compress images and headers */
-      .header-image-container img { max-height: 85px !important; }
-      .form-title { margin: 2px 0 2px 0 !important; font-size: 14px !important; }
-      .section-title { margin-top: 2px !important; margin-bottom: 2px !important; }
-      
+      /* استعادة حجم الشعار ومربعات التوقيع */
+      .header-image-container img { max-height: 110px !important; }
       canvas { 
         border: none !important; 
         background: transparent !important; 
-        height: 40px !important; /* Shrunk slightly more */
-        max-height: 40px !important;
+        height: 60px !important; 
+        max-height: 60px !important;
         width: 100% !important;
         object-fit: contain !important;
       }
       
-      .actions-bar, .btn-clear, .credit-footer, #browser-warning { 
-        display: none !important; 
-      }
+      .actions-bar, .btn-clear, .credit-footer, #browser-warning { display: none !important; }
       select {
         -webkit-appearance: none !important;
         -moz-appearance: none !important;
