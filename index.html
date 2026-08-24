@@ -172,7 +172,7 @@
       margin-top: 5px;
     }
     .credit-footer {
-      text-align: center;
+      text-align: right;
       font-size: 12px;
       color: #555;
       margin-top: 20px;
@@ -220,26 +220,32 @@
     }
 
     /* --- Print & PDF Export Rules --- */
+   /* --- Print & PDF Export Rules --- */
     @media print {
       @page { size: A4; margin: 0; }
       html, body { 
         background: #fff !important; 
         padding: 0 !important; 
         margin: 0 !important;
-        height: 297mm !important;
+        height: 100% !important; /* Forces mobile to respect screen bounds */
+        max-height: 100% !important;
         overflow: hidden !important;
       }
       .page-container { 
         box-shadow: none !important; 
-        padding: 8mm 12mm !important; 
+        padding: 5mm 8mm !important; /* Slightly reduced to guarantee fit */
         width: 100% !important; 
-        height: 297mm !important; 
+        height: 100% !important; 
         max-height: 297mm !important;
         overflow: hidden !important; 
         page-break-after: avoid !important;
         page-break-before: avoid !important;
-        transform: scale(0.98); 
-        transform-origin: top center;
+        page-break-inside: avoid !important;
+        transform: scale(0.96) !important; /* Scaled slightly more to protect mobile margins */
+        transform-origin: top center !important;
+        position: absolute !important; /* This completely kills the phantom second page on mobile */
+        top: 0 !important;
+        left: 0 !important;
       }
       .actions-bar, .btn-clear, .credit-footer, #browser-warning { 
         display: none !important; 
@@ -247,8 +253,8 @@
       canvas { 
         border: none !important; 
         background: transparent !important; 
-        height: 65px !important; 
-        max-height: 65px !important;
+        height: 60px !important; 
+        max-height: 60px !important;
         width: 100% !important;
         object-fit: contain !important;
       }
