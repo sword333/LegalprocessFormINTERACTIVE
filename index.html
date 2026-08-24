@@ -220,8 +220,8 @@
     }
 
    
-    /* --- Print & PDF Export Rules --- */
-    /* --- Print & PDF Export Rules --- */
+   
+   /* --- Print & PDF Export Rules --- */
     @media print {
       @page { size: A4; margin: 0; }
       html, body { 
@@ -234,7 +234,7 @@
       }
       .page-container { 
         box-shadow: none !important; 
-        padding: 6mm 10mm !important; /* هوامش وسطية ممتازة */
+        padding: 4mm 8mm !important; /* تقليل الهوامش قليلاً لزيادة المساحة السفلية */
         width: 100% !important; 
         height: 297mm !important; 
         max-height: 297mm !important;
@@ -245,8 +245,8 @@
         left: 0 !important;
         overflow: hidden !important; 
 
-        /* تصغير بنسبة 8% لضمان احتواء جميع العناصر في شاشة الهاتف المخصصة للطباعة */
-        transform: scale(0.92) !important;
+        /* زيادة نسبة التصغير قليلاً (88%) لضمان رفع التوقيع بالكامل للصفحة الأولى */
+        transform: scale(0.88) !important;
         transform-origin: top center !important;
 
         page-break-after: avoid !important;
@@ -254,44 +254,39 @@
         page-break-inside: avoid !important;
       }
       
-      /* إجبار التواقيع والمربعات على البقاء بجانب بعضها لمنع التمدد الرأسي */
       .signatures-container { 
         display: flex !important; 
         flex-direction: row !important; 
         flex-wrap: nowrap !important; 
         justify-content: space-between !important; 
         width: 100% !important;
-        margin-top: 10px !important; 
+        margin-top: 5px !important; /* تقليل المسافة فوق التوقيع لرفعه للأعلى */
       }
       .sig-card { width: 48% !important; }
       
-      .grid-3 { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; justify-content: space-between !important; margin-bottom: 6px !important; }
+      .grid-3 { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; justify-content: space-between !important; margin-bottom: 4px !important; }
       .grid-3 > div { width: 32% !important; }
       
-      .grid-2 { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; justify-content: space-between !important; margin-bottom: 6px !important; }
+      .grid-2 { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; justify-content: space-between !important; margin-bottom: 4px !important; }
       .grid-2 > div { width: 48% !important; }
-      .inline-field { flex-wrap: nowrap !important; margin-bottom: 6px !important; }
+      .inline-field { flex-wrap: nowrap !important; margin-bottom: 4px !important; }
       
-      /* 
-         الوزنية الذهبية للخطوط: 12px يعتبر ممتاز ورسمي للكمبيوتر 
-         ويوفر مساحة ممتازة لمنع الترحيل في الهاتف 
-      */
       body, input, select, th, td, label, .sig-card h4 { font-size: 12px !important; }
-      .form-title { margin: 8px 0 !important; font-size: 16px !important; }
-      .salutation { margin-bottom: 8px !important; line-height: 1.5 !important; }
-      .section-title { margin-top: 10px !important; margin-bottom: 6px !important; font-size: 13px !important; }
-      .notice-box { margin: 8px 0 !important; line-height: 1.4 !important; font-size: 11px !important; }
-      .checkbox-group { margin: 8px 0 !important; padding: 4px !important; }
+      .form-title { margin: 5px 0 !important; font-size: 16px !important; }
+      .salutation { margin-bottom: 5px !important; line-height: 1.4 !important; }
+      .section-title { margin-top: 6px !important; margin-bottom: 4px !important; font-size: 13px !important; }
+      .notice-box { margin: 6px 0 !important; line-height: 1.3 !important; font-size: 11px !important; }
+      .checkbox-group { margin: 5px 0 !important; padding: 2px !important; }
       .table-grid th, .table-grid td { padding: 4px !important; }
       
-      /* تصغير الشعار قليلاً لكي لا يستهلك مساحة عمودية كبيرة */
-      .header-image-container img { max-height: 90px !important; }
+      /* تصغير الشعار قليلاً جداً لكسب مساحة إضافية */
+      .header-image-container img { max-height: 85px !important; }
       
       canvas { 
         border: none !important; 
         background: transparent !important; 
-        height: 55px !important; 
-        max-height: 55px !important;
+        height: 50px !important; /* تم إنقاص 5 بكسل للتأكد من عدم التجاوز */
+        max-height: 50px !important;
         width: 100% !important;
         object-fit: contain !important;
       }
