@@ -595,17 +595,34 @@
   // 5. Signature Canvas Logic
   function setupSignature(canvasId) {
     const canvas = document.getElementById(canvasId);
-    if(!canvas) return; // Prevents crash if element is missing
+    if(!canvas) return; 
     const ctx = canvas.getContext('2d');
     let drawing = false;
 
     function resizeCanvas() {
+      // 1. Save the current signature drawing before the canvas resets
+      const savedSignature = canvas.toDataURL(); 
+
       const rect = canvas.getBoundingClientRect();
+      
+      // Prevent unnecessary resetting if the size hasn't actually changed
+      if (canvas.width === rect.width && canvas.height === rect.height) return;
+
+      // 2. Resize the canvas (This normally wipes it blank)
       canvas.width = rect.width;
       canvas.height = rect.height;
       ctx.lineWidth = 2;
       ctx.lineCap = 'round';
       ctx.strokeStyle = '#000080';
+
+      // 3. Immediately redraw the saved signature back onto the resized canvas
+      if (savedSignature !== "data:,") { // Only redraw if it's not empty
+        const img = new Image();
+        img.onload = function() {
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        };
+        img.src = savedSignature;
+      }
     }
     
     setTimeout(resizeCanvas, 100); 
@@ -632,7 +649,6 @@
     canvas.addEventListener('touchend', end);
     canvas.addEventListener('touchmove', draw, {passive: false});
   }
-
   function clearCanvas(canvasId) {
     const canvas = document.getElementById(canvasId);
     if(!canvas) return;
