@@ -173,7 +173,7 @@
     }
     .credit-footer {
       text-align: left;
-      font-size: 8px;
+      font-size: 10px;
       color: #555;
       margin-top: 20px;
       font-weight: bold;
@@ -223,6 +223,7 @@
    /* --- Print & PDF Export Rules --- */
     /* --- Print & PDF Export Rules --- */
     /* --- Print & PDF Export Rules --- */
+    /* --- Print & PDF Export Rules --- */
     @media print {
       @page { size: A4; margin: 0; }
       html, body { 
@@ -243,19 +244,41 @@
         page-break-inside: avoid !important;
       }
       
-      /* THE FIX: Force mobile PDF to use Desktop grid, stopping signatures from stacking vertically */
-      .grid-3 { grid-template-columns: 1fr 1fr 1fr !important; display: grid !important; gap: 10px !important; }
-      .grid-2 { grid-template-columns: 1fr 1fr !important; display: grid !important; gap: 10px !important; }
+      /* THE BULLETPROOF FIX: Use Flexbox and Nowrap to mathematically prevent the second signature from dropping down */
       .signatures-container { 
-        grid-template-columns: 1fr 1fr !important; 
-        display: grid !important; 
-        gap: 30px !important; 
+        display: flex !important; 
+        flex-direction: row !important; 
+        flex-wrap: nowrap !important; 
+        justify-content: space-between !important; 
+        width: 100% !important;
         page-break-inside: avoid !important;
       }
+      .sig-card {
+        width: 48% !important; /* Strictly limits width so they perfectly fit side-by-side */
+        page-break-inside: avoid !important;
+      }
+      
+      /* Apply the same Flexbox fix to the other grids to stop them from expanding the page height */
+      .grid-3 { 
+        display: flex !important; 
+        flex-direction: row !important; 
+        flex-wrap: nowrap !important; 
+        justify-content: space-between !important; 
+      }
+      .grid-3 > div { width: 32% !important; }
+      
+      .grid-2 { 
+        display: flex !important; 
+        flex-direction: row !important; 
+        flex-wrap: nowrap !important; 
+        justify-content: space-between !important; 
+      }
+      .grid-2 > div { width: 48% !important; }
+      
       .inline-field { flex-wrap: nowrap !important; }
       
       /* Compress spacing slightly to guarantee A4 fit */
-      .header-image-container img { max-height: 100px !important; }
+      .header-image-container img { max-height: 95px !important; }
       .form-title { margin: 2px 0 5px 0 !important; }
       .section-title { margin-top: 5px !important; margin-bottom: 5px !important; }
       .notice-box { margin: 5px 0 !important; line-height: 1.4 !important; }
@@ -263,8 +286,8 @@
       canvas { 
         border: none !important; 
         background: transparent !important; 
-        height: 50px !important; 
-        max-height: 50px !important;
+        height: 45px !important; 
+        max-height: 45px !important;
         width: 100% !important;
         object-fit: contain !important;
       }
