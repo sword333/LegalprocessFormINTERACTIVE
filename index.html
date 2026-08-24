@@ -372,8 +372,9 @@
   <!-- Property Details -->
   <div class="section-title">بيانات العقار محل التصرف</div>
   <table class="table-grid">
-    <!-- Header Labels (Reordered) -->
+    <!-- Header Labels (7 Columns) -->
     <tr>
+      <th>المحافظة</th>
       <th>الولاية</th>
       <th>الحي / القرية</th>
       <th>رقم القطعة[cite: 1]</th>
@@ -382,32 +383,45 @@
       <th>المساحة ... م٢[cite: 1]</th>
     </tr>
     
-    <!-- Input Row (Reordered) -->
+    <!-- Input Row -->
     <tr>
-      <!-- 1. الولاية (Triggers the change) -->
+      <!-- 1. المحافظة (Triggers Wilayat change) -->
+      <td>
+        <select id="governorate" onchange="updateWilayats()" style="width: 100%; border: none; outline: none; background: transparent; text-align: center; font-size: 13px; font-weight: bold; font-family: inherit;">
+          <option value="" disabled selected>اختر المحافظة</option>
+          <option value="البريمي">البريمي</option>
+          <option value="مسقط">مسقط</option>
+          <option value="ظفار">ظفار</option>
+          <option value="مسندم">مسندم</option>
+          <option value="الداخلية">الداخلية</option>
+          <option value="شمال الباطنة">شمال الباطنة</option>
+          <option value="جنوب الباطنة">جنوب الباطنة</option>
+          <option value="شمال الشرقية">شمال الشرقية</option>
+          <option value="جنوب الشرقية">جنوب الشرقية</option>
+          <option value="الظاهرة">الظاهرة</option>
+          <option value="الوسطى">الوسطى</option>
+        </select>
+      </td>
+
+      <!-- 2. الولاية (Triggers Village change) -->
       <td>
         <select id="wilayat" onchange="updateVillages()" style="width: 100%; border: none; outline: none; background: transparent; text-align: center; font-size: 13px; font-weight: bold; font-family: inherit;">
           <option value="" disabled selected>اختر الولاية</option>
-          <option value="البريمي">البريمي</option>
-          <option value="محضة">محضة</option>
-          <option value="السنينة">السنينة</option>
         </select>
       </td>
       
-      <!-- 2. الحي / القرية (Dynamic Dropdown) -->
-      <td>
-        <select id="village" style="width: 100%; border: none; outline: none; background: transparent; text-align: center; font-size: 13px; font-weight: bold; font-family: inherit;">
-          <option value="" disabled selected>اختر القرية</option>
-        </select>
+      <!-- 3. الحي / القرية (Dynamic Container: Dropdown OR Text Box) -->
+      <td id="village-container">
+        <input type="text" placeholder="اكتب هنا..." style="width: 100%; border: none; outline: none; background: transparent; text-align: center; font-size: 13px; font-weight: bold; font-family: inherit;">
       </td>
       
-      <!-- 3. رقم القطعة -->
+      <!-- 4. رقم القطعة -->
       <td><input type="text" placeholder="اكتب هنا..."></td>
       
-      <!-- 4. المربع -->
+      <!-- 5. المربع -->
       <td><input type="text" placeholder="اكتب هنا..."></td>
       
-      <!-- 5. الاستعمال -->
+      <!-- 6. الاستعمال -->
       <td>
         <select style="width: 100%; border: none; outline: none; background: transparent; text-align: center; font-size: 13px; font-weight: bold; font-family: inherit;">
           <option value="" disabled selected>اختر الاستعمال</option>
@@ -420,7 +434,7 @@
         </select>
       </td>
       
-      <!-- 6. المساحة م٢ -->
+      <!-- 7. المساحة م٢ -->
       <td><input type="text" placeholder="اكتب هنا..."></td>
     </tr>
   </table>
@@ -550,27 +564,68 @@
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
-const villageData = {
+// Oman Data Library (All Governorates and Wilayats)
+  const omanData = {
+    "البريمي": ["البريمي", "محضة", "السنينة"],
+    "مسقط": ["مسقط", "مطرح", "بوشر", "السيب", "العامرات", "قريات"],
+    "ظفار": ["صلالة", "طاقة", "مرباط", "رخيوت", "ثمريت", "ضلكوت", "المزيونة", "مقشن", "شليم وجزر الحلانيات", "سدح"],
+    "مسندم": ["خصب", "دبا", "بخا", "مدحاء"],
+    "الداخلية": ["نزوى", "بهلاء", "منح", "الحمراء", "أدم", "إزكي", "سمائل", "بدبد", "الجبل الأخضر"],
+    "شمال الباطنة": ["صحار", "شناص", "لوى", "صحم", "الخابورة", "السويق"],
+    "جنوب الباطنة": ["الرستاق", "العوابي", "نخل", "وادي المعاول", "بركاء", "المصنعة"],
+    "شمال الشرقية": ["إبراء", "المضيبي", "بدية", "القابل", "وادي بني خالد", "دماء والطائيين", "سناو"],
+    "جنوب الشرقية": ["صور", "الكامل والوافي", "جعلان بني بوحسن", "جعلان بني بوعلي", "مصيرة"],
+    "الظاهرة": ["عبري", "ينقل", "ضنك"],
+    "الوسطى": ["هيماء", "محوت", "الدقم", "الجازر"]
+  };
+
+  // Dedicated Al Buraimi Village Logic
+  const buraimiVillages = {
     "البريمي": ["البريمي", "صعراء القديمة", "صعراء الجديدة", "الخضراء القديمة", "حماسة", "أرض الجو", "الخضراء الجديدة", "الغريفة", "العقدة شمال/جنوب", "المنطقة الصناعية", "أخرى"],
     "محضة": ["محضة", "الزهيرات", "الورقة", "الوحاشة", "الصلاحات", "حارة الشرق", "الغيلة", "الرميلة", "كحل", "العوهة", "الروضة", "أخرى"],
     "السنينة": ["السنينة", "الهرموزي", "الريحاني", "الراكي", "العويدة", "أخرى"]
   };
 
-  function updateVillages() {
-    const wilayat = document.getElementById("wilayat").value;
-    const villageSelect = document.getElementById("village");
+  // Function 1: Updates Wilayats when a Governorate is chosen
+  function updateWilayats() {
+    const govSelect = document.getElementById("governorate").value;
+    const wilayatSelect = document.getElementById("wilayat");
+    const villageContainer = document.getElementById("village-container");
+
+    wilayatSelect.innerHTML = '<option value="" disabled selected>اختر الولاية</option>';
     
-    // Clear the current options
-    villageSelect.innerHTML = '<option value="" disabled selected>اختر القرية</option>';
-    
-    // Add the new options based on the selection
-    if (villageData[wilayat]) {
-      villageData[wilayat].forEach(function(village) {
+    if (omanData[govSelect]) {
+      omanData[govSelect].forEach(function(wilayat) {
         const option = document.createElement("option");
-        option.value = village;
-        option.text = village;
-        villageSelect.appendChild(option);
+        option.value = wilayat;
+        option.text = wilayat;
+        wilayatSelect.appendChild(option);
       });
+    }
+
+    // Instantly turn Village back into a typing box when Governorate changes
+    villageContainer.innerHTML = '<input type="text" placeholder="اكتب هنا..." style="width: 100%; border: none; outline: none; background: transparent; text-align: center; font-size: 13px; font-weight: bold; font-family: inherit;">';
+  }
+
+  // Function 2: Updates Villages when a Wilayat is chosen
+  function updateVillages() {
+    const govSelect = document.getElementById("governorate").value;
+    const wilayatSelect = document.getElementById("wilayat").value;
+    const villageContainer = document.getElementById("village-container");
+
+    // If they picked Al Buraimi governorate, give them the dropdown menu
+    if (govSelect === "البريمي" && buraimiVillages[wilayatSelect]) {
+      let selectHTML = '<select id="village" style="width: 100%; border: none; outline: none; background: transparent; text-align: center; font-size: 13px; font-weight: bold; font-family: inherit;">';
+      selectHTML += '<option value="" disabled selected>اختر القرية</option>';
+      buraimiVillages[wilayatSelect].forEach(function(village) {
+        selectHTML += '<option value="' + village + '">' + village + '</option>';
+      });
+      selectHTML += '</select>';
+      villageContainer.innerHTML = selectHTML;
+    } 
+    // If they picked any other governorate, keep it as a text typing box
+    else {
+      villageContainer.innerHTML = '<input type="text" placeholder="اكتب هنا..." style="width: 100%; border: none; outline: none; background: transparent; text-align: center; font-size: 13px; font-weight: bold; font-family: inherit;">';
     }
   }
   window.onload = function() {
