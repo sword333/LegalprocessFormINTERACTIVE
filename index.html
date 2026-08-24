@@ -226,40 +226,50 @@
     /* --- Print & PDF Export Rules --- */
     /* --- Print & PDF Export Rules --- */
     /* --- Print & PDF Export Rules --- */
+    /* --- Print & PDF Export Rules --- */
     @media print {
       @page { size: A4; margin: 0; }
       html, body { 
         background: #fff !important; 
         padding: 0 !important; 
         margin: 0 !important;
+        width: 100% !important;
         height: 100% !important;
+        overflow: hidden !important; /* يمنع المتصفح من رؤية أي محتوى خارج الصفحة الأولى */
       }
       .page-container { 
         box-shadow: none !important; 
-        padding: 8mm 12mm !important; /* استعادة الهوامش الطبيعية */
+        padding: 8mm 12mm !important; /* مسافات الكمبيوتر الجميلة */
         width: 100% !important; 
-        height: 297mm !important; 
+        height: 297mm !important; /* إغلاق الارتفاع على مقاس A4 تماماً */
         max-height: 297mm !important;
+        box-sizing: border-box !important;
+        
+        /* الكود السحري الذي يحظر الهاتف من إضافة صفحة ثانية */
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
         overflow: hidden !important; 
+
+        /* تصغير الصفحة بنسبة 5% بلطف لضمان احتواء التوقيع وعدم قصه */
+        transform: scale(0.95) !important;
+        transform-origin: top center !important;
+
         page-break-after: avoid !important;
         page-break-before: avoid !important;
         page-break-inside: avoid !important;
-        /* تصغير الصفحة بالكامل بنسبة 4% ليحتويها الهاتف كقطعة واحدة دون ضغط المسافات */
-        transform: scale(0.96) !important;
-        transform-origin: top center !important;
       }
       
-      /* نظام Flexbox لحماية التواقيع من النزول لصفحة أخرى في الهاتف */
+      /* نظام Flexbox لحماية التواقيع والمربعات من النزول للأسفل */
       .signatures-container { 
         display: flex !important; 
         flex-direction: row !important; 
         flex-wrap: nowrap !important; 
         justify-content: space-between !important; 
         width: 100% !important;
-        page-break-inside: avoid !important;
-        margin-top: 15px !important; /* استعادة مسافة التنفس للتوقيع */
+        margin-top: 15px !important; 
       }
-      .sig-card { width: 48% !important; page-break-inside: avoid !important; }
+      .sig-card { width: 48% !important; }
       
       .grid-3 { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; justify-content: space-between !important; margin-bottom: 8px !important; }
       .grid-3 > div { width: 32% !important; }
@@ -268,9 +278,7 @@
       .grid-2 > div { width: 48% !important; }
       .inline-field { flex-wrap: nowrap !important; margin-bottom: 8px !important; }
       
-      /* 
-         استعادة الدقة والمسافات الأصلية الجميلة لنسخة الكمبيوتر 
-      */
+      /* الخطوط الأصلية المتناسقة للكمبيوتر */
       body, input, select, th, td, label, .sig-card h4 { font-size: 13px !important; }
       .form-title { margin: 10px 0 !important; font-size: 18px !important; }
       .salutation { margin-bottom: 10px !important; line-height: 1.6 !important; }
@@ -279,7 +287,7 @@
       .checkbox-group { margin: 10px 0 !important; padding: 6px !important; }
       .table-grid th, .table-grid td { padding: 5px !important; }
       
-      /* استعادة حجم الشعار ومربعات التوقيع */
+      /* حجم الشعار والتوقيع */
       .header-image-container img { max-height: 110px !important; }
       canvas { 
         border: none !important; 
