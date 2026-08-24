@@ -372,15 +372,15 @@
   <!-- Property Details -->
   <div class="section-title">بيانات العقار محل التصرف</div>
   <table class="table-grid">
-    <!-- Header Labels (7 Columns) -->
+    <!-- Header Labels -->
     <tr>
       <th>المحافظة</th>
       <th>الولاية</th>
       <th>الحي / القرية</th>
-      <th>رقم القطعة[cite: 1]</th>
-      <th>المربع[cite: 1]</th>
-      <th>الاستعمال ...[cite: 1]</th>
-      <th>المساحة ... م٢[cite: 1]</th>
+      <th>رقم القطعة</th>
+      <th>المربع</th>
+      <th>الاستعمال ...</th>
+      <th>المساحة ... م٢</th>
     </tr>
     
     <!-- Input Row -->
@@ -410,7 +410,7 @@
         </select>
       </td>
       
-      <!-- 3. الحي / القرية (Dynamic Container: Dropdown OR Text Box) -->
+      <!-- 3. الحي / القرية (Dynamic Container) -->
       <td id="village-container">
         <input type="text" placeholder="اكتب هنا..." style="width: 100%; border: none; outline: none; background: transparent; text-align: center; font-size: 13px; font-weight: bold; font-family: inherit;">
       </td>
@@ -564,7 +564,8 @@
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
-// Oman Data Library (All Governorates and Wilayats)
+<script>
+  // Oman Data Library (All Governorates and Wilayats)
   const omanData = {
     "البريمي": ["البريمي", "محضة", "السنينة"],
     "مسقط": ["مسقط", "مطرح", "بوشر", "السيب", "العامرات", "قريات"],
@@ -586,7 +587,6 @@
     "السنينة": ["السنينة", "الهرموزي", "الريحاني", "الراكي", "العويدة", "أخرى"]
   };
 
-  // Function 1: Updates Wilayats when a Governorate is chosen
   function updateWilayats() {
     const govSelect = document.getElementById("governorate").value;
     const wilayatSelect = document.getElementById("wilayat");
@@ -603,17 +603,16 @@
       });
     }
 
-    // Instantly turn Village back into a typing box when Governorate changes
+    // Reset Village to text box when Governorate changes
     villageContainer.innerHTML = '<input type="text" placeholder="اكتب هنا..." style="width: 100%; border: none; outline: none; background: transparent; text-align: center; font-size: 13px; font-weight: bold; font-family: inherit;">';
   }
 
-  // Function 2: Updates Villages when a Wilayat is chosen
   function updateVillages() {
     const govSelect = document.getElementById("governorate").value;
     const wilayatSelect = document.getElementById("wilayat").value;
     const villageContainer = document.getElementById("village-container");
 
-    // If they picked Al Buraimi governorate, give them the dropdown menu
+    // If Al Buraimi governorate is selected, render the dropdown menu
     if (govSelect === "البريمي" && buraimiVillages[wilayatSelect]) {
       let selectHTML = '<select id="village" style="width: 100%; border: none; outline: none; background: transparent; text-align: center; font-size: 13px; font-weight: bold; font-family: inherit;">';
       selectHTML += '<option value="" disabled selected>اختر القرية</option>';
@@ -623,11 +622,79 @@
       selectHTML += '</select>';
       villageContainer.innerHTML = selectHTML;
     } 
-    // If they picked any other governorate, keep it as a text typing box
+    // For all other governorates, keep it as a text typing box
     else {
       villageContainer.innerHTML = '<input type="text" placeholder="اكتب هنا..." style="width: 100%; border: none; outline: none; background: transparent; text-align: center; font-size: 13px; font-weight: bold; font-family: inherit;">';
     }
   }
+
+  // PDF Export Engine (With Mobile Crop Fix)
+  function printForm() {
+    window.scrollTo(0, 0); 
+    
+    var actionBar = document.querySelector('.actions-bar');
+    var creditFooter = document.querySelector('.credit-footer');
+    var browserWarning = document.getElementById('browser-warning');
+
+    if (actionBar) actionBar.style.display = 'none';
+    if (creditFooter) creditFooter.style.display = 'none';
+    if (browserWarning) browserWarning.style.display = 'none';
+
+    setTimeout(function() {
+      window.print();
+      setTimeout(function() {
+        if (actionBar) actionBar.style.display = 'flex';
+        if (creditFooter) creditFooter.style.display = 'block';
+      }, 1500);
+    }, 300);
+  }
+
+  // Signature Canvas Engine
+  function setupSignature(canvasId) {
+    const canvas = document.getElementById(canvasId);
+    const ctx = canvas.getContext('2d');
+    let drawing = false;
+
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = '#000080';
+    }
+    
+    setTimeout(resizeCanvas, 100); 
+    window.addEventListener('resize', resizeCanvas);
+
+    function start(e) { drawing = true; draw(e); }
+    function end() { drawing = false; ctx.beginPath(); }
+    function draw(e) {
+      if (!drawing) return;
+      e.preventDefault();
+      const rect = canvas.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      ctx.lineTo(clientX - rect.left, clientY - rect.top);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(clientX - rect.left, clientY - rect.top);
+    }
+
+    canvas.addEventListener('mousedown', start);
+    canvas.addEventListener('mouseup', end);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('touchstart', start, {passive: false});
+    canvas.addEventListener('touchend', end);
+    canvas.addEventListener('touchmove', draw, {passive: false});
+  }
+
+  function clearCanvas(canvasId) {
+    const canvas = document.getElementById(canvasId);
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+
   window.onload = function() {
     setupSignature('sig1');
     setupSignature('sig2');
