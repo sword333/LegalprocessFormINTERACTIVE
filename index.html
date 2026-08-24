@@ -219,12 +219,7 @@
       .btn-action { font-size: 12px; padding: 8px 12px; }
     }
 
-    /* --- Print & PDF Export Rules --- */
-   /* --- Print & PDF Export Rules --- */
-    /* --- Print & PDF Export Rules --- */
-    /* --- Print & PDF Export Rules --- */
-    /* --- Print & PDF Export Rules --- */
-    /* --- Print & PDF Export Rules --- */
+   
     /* --- Print & PDF Export Rules --- */
     /* --- Print & PDF Export Rules --- */
     @media print {
@@ -235,24 +230,23 @@
         margin: 0 !important;
         width: 100% !important;
         height: 100% !important;
-        overflow: hidden !important; /* يمنع المتصفح من رؤية أي محتوى خارج الصفحة الأولى */
+        overflow: hidden !important; 
       }
       .page-container { 
         box-shadow: none !important; 
-        padding: 8mm 12mm !important; /* مسافات الكمبيوتر الجميلة */
+        padding: 6mm 10mm !important; /* هوامش وسطية ممتازة */
         width: 100% !important; 
-        height: 297mm !important; /* إغلاق الارتفاع على مقاس A4 تماماً */
+        height: 297mm !important; 
         max-height: 297mm !important;
         box-sizing: border-box !important;
         
-        /* الكود السحري الذي يحظر الهاتف من إضافة صفحة ثانية */
         position: absolute !important;
         top: 0 !important;
         left: 0 !important;
         overflow: hidden !important; 
 
-        /* تصغير الصفحة بنسبة 5% بلطف لضمان احتواء التوقيع وعدم قصه */
-        transform: scale(0.95) !important;
+        /* تصغير بنسبة 8% لضمان احتواء جميع العناصر في شاشة الهاتف المخصصة للطباعة */
+        transform: scale(0.92) !important;
         transform-origin: top center !important;
 
         page-break-after: avoid !important;
@@ -260,40 +254,44 @@
         page-break-inside: avoid !important;
       }
       
-      /* نظام Flexbox لحماية التواقيع والمربعات من النزول للأسفل */
+      /* إجبار التواقيع والمربعات على البقاء بجانب بعضها لمنع التمدد الرأسي */
       .signatures-container { 
         display: flex !important; 
         flex-direction: row !important; 
         flex-wrap: nowrap !important; 
         justify-content: space-between !important; 
         width: 100% !important;
-        margin-top: 15px !important; 
+        margin-top: 10px !important; 
       }
       .sig-card { width: 48% !important; }
       
-      .grid-3 { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; justify-content: space-between !important; margin-bottom: 8px !important; }
+      .grid-3 { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; justify-content: space-between !important; margin-bottom: 6px !important; }
       .grid-3 > div { width: 32% !important; }
       
-      .grid-2 { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; justify-content: space-between !important; margin-bottom: 8px !important; }
+      .grid-2 { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; justify-content: space-between !important; margin-bottom: 6px !important; }
       .grid-2 > div { width: 48% !important; }
-      .inline-field { flex-wrap: nowrap !important; margin-bottom: 8px !important; }
+      .inline-field { flex-wrap: nowrap !important; margin-bottom: 6px !important; }
       
-      /* الخطوط الأصلية المتناسقة للكمبيوتر */
-      body, input, select, th, td, label, .sig-card h4 { font-size: 13px !important; }
-      .form-title { margin: 10px 0 !important; font-size: 18px !important; }
-      .salutation { margin-bottom: 10px !important; line-height: 1.6 !important; }
-      .section-title { margin-top: 12px !important; margin-bottom: 8px !important; font-size: 14px !important; }
-      .notice-box { margin: 10px 0 !important; line-height: 1.5 !important; font-size: 12px !important; }
-      .checkbox-group { margin: 10px 0 !important; padding: 6px !important; }
-      .table-grid th, .table-grid td { padding: 5px !important; }
+      /* 
+         الوزنية الذهبية للخطوط: 12px يعتبر ممتاز ورسمي للكمبيوتر 
+         ويوفر مساحة ممتازة لمنع الترحيل في الهاتف 
+      */
+      body, input, select, th, td, label, .sig-card h4 { font-size: 12px !important; }
+      .form-title { margin: 8px 0 !important; font-size: 16px !important; }
+      .salutation { margin-bottom: 8px !important; line-height: 1.5 !important; }
+      .section-title { margin-top: 10px !important; margin-bottom: 6px !important; font-size: 13px !important; }
+      .notice-box { margin: 8px 0 !important; line-height: 1.4 !important; font-size: 11px !important; }
+      .checkbox-group { margin: 8px 0 !important; padding: 4px !important; }
+      .table-grid th, .table-grid td { padding: 4px !important; }
       
-      /* حجم الشعار والتوقيع */
-      .header-image-container img { max-height: 110px !important; }
+      /* تصغير الشعار قليلاً لكي لا يستهلك مساحة عمودية كبيرة */
+      .header-image-container img { max-height: 90px !important; }
+      
       canvas { 
         border: none !important; 
         background: transparent !important; 
-        height: 60px !important; 
-        max-height: 60px !important;
+        height: 55px !important; 
+        max-height: 55px !important;
         width: 100% !important;
         object-fit: contain !important;
       }
