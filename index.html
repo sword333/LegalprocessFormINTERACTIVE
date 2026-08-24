@@ -260,6 +260,40 @@
     }
     /* ------------------------------- */
     @media print {
+      @page {
+        size: A4;
+        margin: 0;
+      }
+      html, body { 
+        background: #fff !important; 
+        padding: 0 !important; 
+        margin: 0 !important;
+        height: 297mm !important;
+        overflow: hidden !important;
+      }
+      .page-container { 
+        box-shadow: none !important; 
+        padding: 8mm 12mm !important; 
+        width: 100% !important; 
+        height: 297mm !important; 
+        max-height: 297mm !important;
+        overflow: hidden !important; 
+        page-break-after: avoid !important;
+        page-break-before: avoid !important;
+        transform: scale(0.98); 
+        transform-origin: top center;
+      }
+      .actions-bar, .btn-clear, .credit-footer { 
+        display: none !important; 
+      }
+      canvas { 
+        border: none !important; 
+        background: transparent !important; 
+        height: 65px !important; 
+        max-height: 65px !important;
+        width: 100% !important;
+        object-fit: contain !important;
+      }
       select {
         -webkit-appearance: none !important;
         -moz-appearance: none !important;
@@ -267,34 +301,6 @@
         background: transparent !important;
         border: none !important;
         color: #000;
-      }
-      @page {
-        size: A4;
-        margin: 0; /* Forces one page by removing browser headers/footers */
-/* Hides the buttons, clear buttons, and the creator credit when exporting/printing */
-    .actions-bar, .btn-clear, .credit-footer { 
-      display: none !important; 
-    }      }
-      body { 
-        background: #fff; 
-        padding: 0; 
-        margin: 0;
-      }
-      .page-container { 
-        box-shadow: none; 
-        padding: 10mm 15mm; 
-        width: 100%; 
-        height: 297mm; /* Lock to exact A4 height */
-        max-height: 297mm;
-        overflow: hidden; 
-      }
-      /* Hides the buttons and the creator credit when exporting/printing */
-      .actions-bar, .btn-clear, .credit-footer { 
-        display: none !important; 
-      }
-      canvas { 
-        border: none !important; 
-        background: transparent !important; 
       }
     }
   </style>
@@ -476,23 +482,29 @@
 
 <script>
   function printForm() {
+    // 1. Force scroll to top to prevent mobile canvas cropping bugs
+    window.scrollTo(0, 0); 
+    
     var actionBar = document.querySelector('.actions-bar');
     var creditFooter = document.querySelector('.credit-footer');
     var browserWarning = document.getElementById('browser-warning');
 
-    // 1. Instantly hide the elements
+    // 2. Instantly hide the elements
     if (actionBar) actionBar.style.display = 'none';
     if (creditFooter) creditFooter.style.display = 'none';
     if (browserWarning) browserWarning.style.display = 'none';
 
-    // 2. Trigger the mobile print engine
-    window.print();
-
-    // 3. Bring the elements back after 1.5 seconds (gives the phone time to build the PDF)
+    // 3. Add a tiny 0.3s delay so the phone registers the scroll before printing
     setTimeout(function() {
-      if (actionBar) actionBar.style.display = 'flex';
-      if (creditFooter) creditFooter.style.display = 'block';
-    }, 1500);
+      window.print();
+
+      // 4. Bring the elements back after generating the PDF
+      setTimeout(function() {
+        if (actionBar) actionBar.style.display = 'flex';
+        if (creditFooter) creditFooter.style.display = 'block';
+      }, 1500);
+    }, 300);
+  }
   }
   function setupSignature(canvasId) {
     const canvas = document.getElementById(canvasId);
