@@ -181,11 +181,19 @@
       margin-top: 5px;
     }
     .credit-footer {
-      text-align: left;
-      font-size: 10px;
+      font-size: 12px;
       color: #555;
-      margin-top: 5px;
       font-weight: bold;
+      
+      /* 1. Tell it to break out of the normal flow */
+      position: absolute; 
+      
+      /* 2. Push it exactly 20 pixels from the bottom edge of the paper */
+      bottom: 20px; 
+      
+      /* 3. Center it perfectly horizontally */
+      left: 50%;
+      transform: translateX(-50%);
     }
     .actions-bar {
       position: fixed;
